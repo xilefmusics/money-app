@@ -280,7 +280,7 @@ func (data *Data) AddEvent(user string, newEvent event.Event) {
 	event.Save(fmt.Sprintf("%s/%s.json", data.eventsPath, user), events)
 }
 
-func (data *Data) Undo(user string) {
+func (data *Data) Undo(user string) (*event.Event, error) {
 	// todo error handling
 
 	mutex, ok := data.eventsMutex[user]
@@ -310,7 +310,7 @@ func (data *Data) Undo(user string) {
 	}
 
 	if !found {
-		return
+		return nil, errors.New("no event found")
 	}
 
 	if eventVar.Type == "addTransactions" {
@@ -326,4 +326,6 @@ func (data *Data) Undo(user string) {
 	events[eventIdx] = eventVar
 	data.events[user] = events
 	event.Save(fmt.Sprintf("%s/%s.json", data.eventsPath, user), events)
+
+	return &eventVar, nil
 }

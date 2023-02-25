@@ -44,8 +44,12 @@ func Undo(gc *gin.Context) {
 		return
 	}
 
-	globalData.Undo(user)
+	event, err := globalData.Undo(user)
+	if err != nil {
+		log.Printf("ERROR: %s\n", err.Error())
+		gc.String(http.StatusInternalServerError, "501 Internal Server Error")
+		return
+	}
 
-	// TODO return applied event
-	gc.IndentedJSON(http.StatusOK, "")
+	gc.IndentedJSON(http.StatusOK, event)
 }
