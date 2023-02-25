@@ -9,15 +9,25 @@ The App is implemented through a Golang-Backend and a Svelte-Kit-Frontend.
 For them to work together some sort of authentication proxy (like [proxauth](https://github.com/xilefmusics/proxauth)) is needed since the backend doesn't handle user authentication itself.
 
 ## Backend
-The backend at the moment is readonly, but the data module is prepared to also accept multiple write processes.
+The backend stores the list of transactions per user.
 It selects the data it operates on through a header `user: <username>`.
-The currently supported requests are
+If a request changes data it adds a change event to a list of events.
+The newest event can be rolledbacked through the endpoint  `/undo`.
+
+### GET /transactions
+### POST /transactions
+### PUT /transactions
+### DELETE /transactions
 
 |Endpoint|Method|Description|
 |--------|------|-----------|
 |/transactions|GET|Returns all transactions.|
+|/transactions|POST|Updates a transaction based on IDs.|
+|/transactions|PUT|Creates new transactions, ignores if they are not yet there.|
+|/transactions|DELETE|Deletes the the given list of transactions based on their IDs.|
 |/lint|GET|Returns all linting problems of transactions.|
 |/reindex|GET|Sorts transactions by date and overwrites the ID with the index.|
+|/undo|GET|Undoos the last action. Returns the applied event.|
 |/pods|GET|Returns all pods.|
 |/debts|GET|Returns all debts.|
 |/budgets|GET|Returns all budgets.|
