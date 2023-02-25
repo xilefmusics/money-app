@@ -81,7 +81,6 @@ The default format of a datapoint is the absolute value at a specific time and t
 
 ```json
 {
-    "date": "<date>",
     "value": "<value>",
     "diff": "<diff>"
 }
