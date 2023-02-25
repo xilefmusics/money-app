@@ -54,54 +54,72 @@ If no transactions with a given ID exists it gets ignored and is missing in the 
 
 Receives a list of transactions and deletes them given their ID.
 
-### Get /pods
+### GET /pods
 
 Returns a list of all the pod names that occure in the sender or receiver field of the transactions.
 
-### Get /debts
+### GET /debts
 
 Returns a list of all the debt names that occure in the transactions.
 
-### Get /budgets
+### GET /budgets
 
 Returns a list of all the budget names that occure in the transactions.
 
-### Get /inbudgets
+### GET /inbudgets
 
 Returns a list of all the inbudget names that occure in the transactions.
 
-### Get /tags
+### GET /tags
 
 Returns a list of all the inbudget names that occure in the transactions.
 
-### Get /history/...
+### GET /history/...
 
 The history endpoint returns a list of datapoints of different kindes given a timespan.
 The default format of a datapoint is the absolute value at a specific time and the difference since the last datapoint.
 
 ```json
 {
-    "value": "<value>",
-    "diff": "<diff>"
+  "value": "<value>",
+  "diff": "<diff>"
 }
 ```
 
-The supported history data series are: 
+The supported history data series are:
+
 - budgets
 - inbudgets
 - pod
 - wealth
 
 The supported params to change the dataseries are:
-- year
-- month
-- day
-- len
 
+| Param | Function                                     | Default |
+| ----- | -------------------------------------------- | ------- |
+| year  | The amount of years between the datapoints.  | 0       |
+| month | The amount of months between the datapoints. | 0       |
+| day   | The amount of days between the datapoints.   | 0       |
+| len   | The amount of datapoints                     | 1       |
 
-| Endpoint           | Method | Description                                                      |
-| ------------------ | ------ | ---------------------------------------------------------------- |
-| /lint              | GET    | Returns all linting problems of transactions.                    |
-| /reindex           | GET    | Sorts transactions by date and overwrites the ID with the index. |
-| /undo              | GET    | Undoos the last action. Returns the applied event.               |
+### GET /lint
 
+Returns a list of anomalies inside the transactions.
+This is not yet a full list, but some lint rules.
+The current list of rules is:
+
+| Rule | Description                                                                                    |
+| ---- | ---------------------------------------------------------------------------------------------- |
+| 1    | If the transaction type is `in` the budget sum has to be empty.                                |
+| 2    | If the transaction type is `in` the inbudget sum plus the debt sum has to be equal the amount. |
+| 3    | If the transaction type is `out` the inbudget sum has to be empty.                             |
+| 4    | If the transaction type is `in` the budget sum plus the debt sum has to be equal the amount.   |
+
+### GET /reindex
+
+Sorts transactions by date and overwrites the ID with the index.
+This schould only be used if you know, what your doing.
+
+### GET /undo
+
+Undoos the last action and returns the applied event. 
