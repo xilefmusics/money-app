@@ -31,9 +31,9 @@ Returns a list of transactions.
 | type     | \*      |
 | id       | \*      |
 
-### POST /transactions
+### POST `/transactions`
 
-### PUT /transactions
+### `PUT /transactions`
 
 ### DELETE /transactions
 
