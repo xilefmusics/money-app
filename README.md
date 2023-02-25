@@ -31,28 +31,78 @@ Returns a list of transactions.
 | type     | \*      |
 | id       | \*      |
 
-### POST `/transactions`
+### POST /transactions
 
-### `PUT /transactions`
+Receives a list of transactions as payload and creates new transactions out of it.
+The given ID of the transactions gets ignored and a new one gets assigned.
+In contrast to all the other endpoints it accepts the data in multiple different forms and can therefore be used to import transactions from multiple different sources.
+The list of supported formats can be seen in the table below.
+
+| Format         | Explanation                                 |
+| -------------- | ------------------------------------------- |
+| json           | The default format of this money app.       |
+| csv (Barclays) | The csv export of the Barclays credit card. |
+| csv (N26)      | The csv export of the N26 bank.             |
+
+### PUT /transactions
+
+Receives a list of transactions as payload and updates the transactions given the ID.
+It returns all change transactions.
+If no transactions with a given ID exists it gets ignored and is missing in the result.
 
 ### DELETE /transactions
 
+Receives a list of transactions and deletes them given their ID.
+
+### Get /pods
+
+Returns a list of all the pod names that occure in the sender or receiver field of the transactions.
+
+### Get /debts
+
+Returns a list of all the debt names that occure in the transactions.
+
+### Get /budgets
+
+Returns a list of all the budget names that occure in the transactions.
+
+### Get /inbudgets
+
+Returns a list of all the inbudget names that occure in the transactions.
+
+### Get /tags
+
+Returns a list of all the inbudget names that occure in the transactions.
+
+### Get /history/...
+
+The history endpoint returns a list of datapoints of different kindes given a timespan.
+The default format of a datapoint is the absolute value at a specific time and the difference since the last datapoint.
+
+```json
+{
+    "date": "<date>",
+    "value": "<value>",
+    "diff": "<diff>"
+}
+```
+
+The supported history data series are: 
+- budgets
+- inbudgets
+- pod
+- wealth
+
+The supported params to change the dataseries are:
+- year
+- month
+- day
+- len
+
+
 | Endpoint           | Method | Description                                                      |
 | ------------------ | ------ | ---------------------------------------------------------------- |
-| /transactions      | GET    | Returns all transactions.                                        |
-| /transactions      | POST   | Updates a transaction based on IDs.                              |
-| /transactions      | PUT    | Creates new transactions, ignores if they are not yet there.     |
-| /transactions      | DELETE | Deletes the the given list of transactions based on their IDs.   |
 | /lint              | GET    | Returns all linting problems of transactions.                    |
 | /reindex           | GET    | Sorts transactions by date and overwrites the ID with the index. |
 | /undo              | GET    | Undoos the last action. Returns the applied event.               |
-| /pods              | GET    | Returns all pods.                                                |
-| /debts             | GET    | Returns all debts.                                               |
-| /budgets           | GET    | Returns all budgets.                                             |
-| /inbudgets         | GET    | Returns all inbudgets.                                           |
-| /tags              | GET    | Returns all tags.                                                |
-| /history/debt      | GET    | Returns the history of debts.                                    |
-| /history/budgets   | GET    | Returns the history of budgets.                                  |
-| /history/inbudgets | GET    | Returns the history of inbudgets.                                |
-| /history/pod       | GET    | Returns the history of pods.                                     |
-| /history/wealth    | GET    | Returns the history of wealth.                                   |
+
