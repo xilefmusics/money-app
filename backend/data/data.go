@@ -11,15 +11,7 @@ import (
 	"xilefmusics.de/money-app/transaction"
 )
 
-type Data struct {
-	dataPath          string
-	transactionsPath  string
-	eventsPath        string
-	transactions      map[string][]transaction.Transaction
-	transactionsMutex map[string]*sync.Mutex
-	events            map[string][]event.Event
-	eventsMutex       map[string]*sync.Mutex
-}
+type Data map[string]*UserData
 
 func New(dataPath string) (Data, error) {
 	transactionsPath := filepath.Join(dataPath, "transactions")
